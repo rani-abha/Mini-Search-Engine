@@ -17,8 +17,8 @@ public class IndexingService {
 //    @Autowired
 //    MessageSender messageSender;
 
-    @Autowired
-    MessageReceiver messageReceiver;
+//    @Autowired
+//    MessageReceiver messageReceiver;
     private final ContentTokenizer contentTokenizer;
     private final InvertedIndex invertedIndex;
 
