@@ -1,5 +1,6 @@
 package com.seekster.WebCrawler;
 
+import com.seekster.WebCrawler.crawler.interfaces.impl.CrawlerEngineServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,8 +10,8 @@ public class WebCrawlerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WebCrawlerApplication.class, args);
 
-//		WebCrawlerService webCrawlerService = new WebCrawlerService();
-//		webCrawlerService.crawl("https://docs.github.com/en/copilot/overview-of-github-copilot/about-github-copilot-for-individuals#about-github-copilot");
+		CrawlerEngineServiceImpl crawlerEngineService = new CrawlerEngineServiceImpl();
+		crawlerEngineService.crawl("https://www.airtel.in/speedtest/", 0);
 	}
 
 }
