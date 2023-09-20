@@ -1,7 +1,7 @@
 package com.seekster.indexer.rabbitmq;
 
 import com.seekster.indexer.rabbitmq.message.ContentMessage;
-import com.seekster.indexer.services.IndexingService;
+import com.seekster.indexer.api.services.IndexingService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

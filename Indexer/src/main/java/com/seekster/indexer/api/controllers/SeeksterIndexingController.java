@@ -1,8 +1,8 @@
-package com.seekster.indexer.controllers;
+package com.seekster.indexer.api.controllers;
 
 import com.seekster.indexer.rabbitmq.message.ContentMessage;
-import com.seekster.indexer.response.Response;
-import com.seekster.indexer.services.IndexingService;
+import com.seekster.indexer.api.response.Response;
+import com.seekster.indexer.api.services.IndexingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

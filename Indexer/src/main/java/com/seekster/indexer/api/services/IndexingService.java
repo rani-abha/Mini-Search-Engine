@@ -1,4 +1,4 @@
-package com.seekster.indexer.services;
+package com.seekster.indexer.api.services;
 
 import com.seekster.indexer.indexer.ContentTokenizer;
 import com.seekster.indexer.indexer.InvertedIndex;

@@ -1,9 +1,6 @@
 package com.seekster.indexer;
 
-import com.seekster.indexer.rabbitmq.message.ContentMessage;
-import com.seekster.indexer.services.IndexingService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

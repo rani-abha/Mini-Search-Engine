@@ -1,4 +1,4 @@
-package com.seekster.indexer.response;
+package com.seekster.indexer.api.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
