@@ -11,13 +11,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Document(collation = "url")
-public class Url {
+@Document(collection = "website")
+public class Website {
 
     @Id
     private String id;
 
-    private String address;
+    private String seed;
+
+    private String sitemap;
 
     private boolean isCrawl;
 }

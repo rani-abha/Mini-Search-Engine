@@ -25,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 public class CrawlerEngineServiceImpl implements CrawlerEngineService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final Set<URI> visitedUrls = new HashSet<>();
-    MessageSender messageSender = ApplicationContextProvider.getApplicationContext().getBean(MessageSender.class);
+//    MessageSender messageSender = ApplicationContextProvider.getApplicationContext().getBean(MessageSender.class);
 
     public void crawl(String startUrl, int maxDepth) {
         try {
@@ -68,7 +68,7 @@ public class CrawlerEngineServiceImpl implements CrawlerEngineService {
                 contentMessage.setTitle(doc.title());
                 contentMessage.setContent(cleanedText);
                 System.out.println(contentMessage);
-                messageSender.send(contentMessage, RabbitMqConstants.QUEUE_CRAWLER_CONTENT_SEND);
+//                messageSender.send(contentMessage, RabbitMqConstants.QUEUE_CRAWLER_CONTENT_SEND);
 
                 // Print the cleaned text
                 System.out.println(doc.title());

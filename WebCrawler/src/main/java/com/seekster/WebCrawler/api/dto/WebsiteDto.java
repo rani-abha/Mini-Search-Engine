@@ -1,4 +1,4 @@
-package com.seekster.WebCrawler.api.controllers.dto;
+package com.seekster.WebCrawler.api.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -10,12 +10,10 @@ import org.springframework.data.annotation.Id;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UrlDto {
-
-    @Id
-    private Long id;
-
+public class WebsiteDto {
     @NotEmpty
-    @Pattern(regexp = "^(https?://[^/]+/?|[^/]+/?)$\n", message = "Invalid url or not root url")
-    private String address;
+//    @Pattern(regexp = "^(https?://[^/]+/?|[^/]+/?)$\n", message = "Invalid url or not root url")
+    private String seed;
+    @NotEmpty
+    private String sitemap;
 }
