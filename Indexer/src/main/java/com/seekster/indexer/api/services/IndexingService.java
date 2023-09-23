@@ -2,6 +2,7 @@ package com.seekster.indexer.api.services;
 
 import com.seekster.indexer.indexer.ContentTokenizer;
 import com.seekster.indexer.indexer.InvertedIndex;
+import com.seekster.indexer.indexer.SearchQuery;
 import com.seekster.indexer.rabbitmq.MessageReceiver;
 import com.seekster.indexer.rabbitmq.MessageSender;
 import com.seekster.indexer.rabbitmq.RabbitMqConstants;
@@ -9,6 +10,8 @@ import com.seekster.indexer.rabbitmq.message.ContentMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -26,6 +29,7 @@ public class IndexingService {
     public IndexingService(ContentTokenizer contentTokenizer, InvertedIndex invertedIndex) {
         this.contentTokenizer = contentTokenizer;
         this.invertedIndex = invertedIndex;
+
     }
 
     public void handleContentMessage(ContentMessage contentMessage) {
