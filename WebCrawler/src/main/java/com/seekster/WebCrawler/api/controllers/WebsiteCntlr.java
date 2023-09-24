@@ -5,6 +5,7 @@ import com.seekster.WebCrawler.api.exceptions.GenericException;
 import com.seekster.WebCrawler.api.exceptions.ValidationException;
 import com.seekster.WebCrawler.api.response.Response;
 import com.seekster.WebCrawler.api.services.impl.WebsiteSvcImpl;
+import com.seekster.WebCrawler.engine.CrawlerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,8 @@ public class WebsiteCntlr {
 
     @Autowired
     private WebsiteSvcImpl websiteSvc;
+    @Autowired
+    private CrawlerService crawlerService;
 
     @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
