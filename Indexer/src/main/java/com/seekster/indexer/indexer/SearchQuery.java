@@ -42,9 +42,17 @@ public class SearchQuery {
                 for (Map.Entry<String, List<Integer>> entry : tokenInfo.entrySet()) {
                     String url = entry.getKey();
                     List<Integer> positions = entry.getValue();
-
+//
+//                    String title = getTitleFromURL(url);
+//                    String content = getContentSnippetFromURL(url, positions);
+//
+//                    // Create a map to store title and content snippet
+//                    Map<String, String> resultInfo = new HashMap<>();
+//                    resultInfo.put("title", title);
+//                    resultInfo.put("contentSnippet", content);
                     // Add URL and positions to the search results
                     searchResults.put(url, positions);
+                    System.out.println("url fired by query "+url);
                 }
             }
         }

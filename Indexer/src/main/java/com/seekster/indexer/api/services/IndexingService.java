@@ -38,7 +38,7 @@ public class IndexingService {
         String content = contentMessage.getContent();
 
         // Tokenize the content
-        String[] tokens = contentTokenizer.tokenize(content);
+        String[] tokens = contentTokenizer.tokenize(content+title);
 
         System.out.println("URL: " + url);
         System.out.println("Title: " + title);

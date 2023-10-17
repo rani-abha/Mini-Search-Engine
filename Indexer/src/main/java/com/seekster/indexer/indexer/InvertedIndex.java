@@ -54,6 +54,14 @@ public class InvertedIndex {
         return index.getOrDefault(token, Collections.emptyMap());
     }
 
+    public Map<String, List<Integer>> getDocumentTitles(String token) {
+        index.entrySet();
+        index.keySet();
+        return index.getOrDefault(token, Collections.emptyMap());
+    }
+
+
+
     public Set<String> getIndexedTokens() {
         return index.keySet();
     }
