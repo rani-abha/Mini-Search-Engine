@@ -40,6 +40,8 @@ public class IndexDataWriter {
     }
 
     public void write(Date packetDate, List<ContentMessage> packet) {
+        //TODO: handling query date if needed
+
         // creating fields for document
         List<Field> fields = createTextField(packet);
 
@@ -66,6 +68,7 @@ public class IndexDataWriter {
     public List<Field> createTextField(List<ContentMessage> contentAttributes) {
         List<Field> fields = new ArrayList<>();
         for (ContentMessage contentAttribute : contentAttributes) {
+//            A field that is indexed and tokenized, without term vectors
             fields.add(new TextField(contentAttribute.getUrl(), String.valueOf(contentAttribute.getContent()+contentAttribute.getTitle()), Field.Store.YES));
         }
         return fields;
