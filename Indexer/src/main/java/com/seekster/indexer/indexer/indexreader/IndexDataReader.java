@@ -15,14 +15,16 @@ import java.util.concurrent.Callable;
 public class IndexDataReader implements Callable<Boolean> {
     private final IndexSearchQuery indexSearchQuery;
 
-    private final ConcurrentQueue<Document> resultDocs;
+    //TODO: Creating Queues
+//    private final ConcurrentQueue<Document> resultDocs;
 
     private final String index;
 
-    public IndexReaderJob(IndexSearchQuery indexSearchQuery, String index, ConcurrentQueue<Document> resultDocs) {
+    public IndexDataReader(IndexSearchQuery indexSearchQuery, String index
+    ) {
         this.indexSearchQuery = indexSearchQuery;
         this.index = index;
-        this.resultDocs = resultDocs;
+//        this.resultDocs = resultDocs;
     }
     @Override
     public Boolean call() {
@@ -38,7 +40,6 @@ public class IndexDataReader implements Callable<Boolean> {
         }
     }
 
-    @Override
     public void read(IndexSearchQuery indexSearchQuery) throws IOException {
         log.info("Started execution of reading utility of index reader job...");
         indexSearchQuery.setIndex(index);
@@ -47,9 +48,10 @@ public class IndexDataReader implements Callable<Boolean> {
         // Search based on fields
         org.apache.lucene.index.IndexReader reader = DirectoryReader.open(directory);
 
-        IndexQueryFactory queryFactory = new IndexQueryFactory();
-        IndexQuery indexQuery = queryFactory.submitIndexQuery(indexSearchQuery.getQuery().getType());
-        indexQuery.execute(indexSearchQuery, reader, resultDocs);
+        //TODO: Creating Factory
+//        IndexQueryFactory queryFactory = new IndexQueryFactory();
+//        IndexQuery indexQuery = queryFactory.submitIndexQuery(indexSearchQuery.getQuery().getType());
+//        indexQuery.execute(indexSearchQuery, reader, resultDocs);
     }
 
 }

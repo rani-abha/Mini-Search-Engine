@@ -15,7 +15,6 @@ public class IndexReaderImpl implements HandleIndexSearchRequest {
     public void processRequestFor(ReceivedIndexQuery receivedIndexQuery) throws IOException {
 
     }
-
     @Override
     public void updateRequestStatusFor(ReceivedIndexQuery receivedIndexQuery, String queryRequestId) {
 
