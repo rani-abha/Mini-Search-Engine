@@ -1,67 +1,63 @@
 package com.seekster.WebCrawler.engine;
 
-import lombok.NoArgsConstructor;
+import com.seekster.WebCrawler.rabbitmq.MessageSender;
+import com.seekster.WebCrawler.rabbitmq.message.ContentMessage;
+import com.seekster.WebCrawler.registry.ApplicationContextProvider;
+import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.crawler.WebCrawler;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.url.WebURL;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@NoArgsConstructor
-public class Crawler implements Runnable {
+import java.util.Set;
+import java.util.regex.Pattern;
 
-    private int numberOfLinksToCrawl;
-    private CrawlerQueue crawledSites;
-    private int T;
-    private String s;
+import static com.seekster.WebCrawler.rabbitmq.RabbitMqConstants.QUEUE_CRAWLER_CONTENT_SEND;
 
-    public CrawlerQueue getCrawledSites() {
-        return crawledSites;
-    }
+public class Crawler extends WebCrawler {
 
-    public void setCrawledSites(CrawlerQueue crawledSites, int numberOfLinksToCrawl) {
-        this.crawledSites = crawledSites;
-        this.numberOfLinksToCrawl = numberOfLinksToCrawl;
-    }
-
-    Crawler(int number) {
-        this.numberOfLinksToCrawl = number;
-
-    }
-
-    Crawler(CrawlerQueue crawledSites, int number, int T,String s) {
-        this.crawledSites = crawledSites;
-        this.numberOfLinksToCrawl = number;
-        this.T = T;
-        this.s = s;
-        System.out.println("Started !--> "+T);
-    }
-
-    public int getNumberOfLinksToCrawl() {
-        return numberOfLinksToCrawl;
-    }
-
-    public void setNumberOfLinksToCrawl(int numberOfLinksToCrawl) {
-        this.numberOfLinksToCrawl = numberOfLinksToCrawl;
-    }
-
+    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
+            + "|png|mp3|mp4|zip|gz))$");
+    private final MessageSender messageSender = ApplicationContextProvider.getApplicationContext().getBean(MessageSender.class);
+    /**
+     * This method receives two parameters. The first parameter is the page
+     * in which we have discovered this new url and the second parameter is
+     * the new url. You should implement this function to specify whether
+     * the given url should be crawled or not (based on your crawling logic).
+     * In this example, we are instructing the crawler to ignore urls that
+     * have css, js, git, ... extensions and to only accept urls that start
+     * with "https://www.ics.uci.edu/". In this case, we didn't need the
+     * referringPage parameter to make the decision.
+     */
     @Override
-    public void run() {
-        //To change body of implemented methods use File | Settings | File Templates.
-        try {
-            //System.out.println("T->"+T);
-            //add the condition crawledSites.getQueueLength()>0 - always kills one thread in the processes
-            while ((crawledSites.getCrawledSites().size() < numberOfLinksToCrawl)) {
-                HTMLParser.getLinks(crawledSites,T,numberOfLinksToCrawl,s);
-            }
-            crawledSites = null;
-            numberOfLinksToCrawl = 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public boolean shouldVisit(Page referringPage, WebURL url) {
+        String href = url.getURL().toLowerCase();
+        return !FILTERS.matcher(href).matches()
+                && href.startsWith(url.getParentUrl());
     }
-    //notice static!
-    public static void initializeCrawling(int numberOfThreads, CrawlerQueue crawledSites, int maximumLimit,String s) {
 
-        for (int i = 0; i < numberOfThreads; ++i) {
-            new Thread(new Crawler(crawledSites, maximumLimit,i,s)).start();
-            System.out.println("Started thread: " + i+s);
+    /**
+     * This function is called when a page is fetched and ready
+     * to be processed by your program.
+     */
+    @Override
+    public void visit(Page page) {
+        String url = page.getWebURL().getURL();
+        System.out.println("URL: " + url);
+        if (page.getParseData() instanceof HtmlParseData htmlParseData && !page.isRedirect()) {
+            ContentMessage message = new ContentMessage();
+            message.setUrl(url);
+            message.setTitle(htmlParseData.getTitle());
+            String content = Jsoup.parse(htmlParseData.getHtml()).wholeText();
+            String cleanContent = content.replaceAll("\\s+", " ").trim();
+            message.setContent(cleanContent);
+            messageSender.send(message, QUEUE_CRAWLER_CONTENT_SEND);
         }
     }
 }

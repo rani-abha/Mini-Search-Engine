@@ -14,6 +14,4 @@ public class WebsiteDto {
     @NotEmpty
 //    @Pattern(regexp = "^(https?://[^/]+/?|[^/]+/?)$\n", message = "Invalid url or not root url")
     private String seed;
-    @NotEmpty
-    private String sitemap;
 }

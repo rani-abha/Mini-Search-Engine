@@ -3,6 +3,7 @@ package com.seekster.WebCrawler.api.exceptions;
 import com.seekster.WebCrawler.api.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,4 +35,21 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Response> handleHttpMessageNotReadableException (HttpMessageNotReadableException exception){
+        Map<String, String> response = new HashMap<>();
+        String name = "HttpMessageNotReadableException";
+        String message = exception.getMessage();
+        response.put(name, message);
+        return ResponseEntity.ok(
+                Response.builder()
+                        .responseTime(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .message("HttpMessage Not Readable!")
+                        .data(Collections.singletonMap("error", response))
+                        .build()
+        );
+    }
+
 }

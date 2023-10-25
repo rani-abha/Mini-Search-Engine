@@ -1,5 +1,6 @@
 package com.seekster.WebCrawler.api.controllers;
 
+import com.seekster.WebCrawler.api.dto.SettingDto;
 import com.seekster.WebCrawler.api.response.Response;
 import com.seekster.WebCrawler.engine.CrawlerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +46,7 @@ public class CrawlCntlr {
                             .data(map)
                             .build()
             );
-        } catch (IllegalArgumentException exception) {
+        } catch (Exception exception) {
             return ResponseEntity.ok(
                     Response.builder()
                             .responseTime(LocalDateTime.now())

@@ -71,7 +71,6 @@ public class WebsiteSvcImpl implements WebsiteSvc {
         }
         if (website.isPresent()) {
             website.get().setSeed(websiteDto.getSeed());
-            website.get().setSitemap(websiteDto.getSitemap());
             try {
                 log.debug("updating existing website with id : " + id);
                 return websiteRepo.save(website.get());

@@ -1,34 +1,43 @@
 package com.seekster.WebCrawler.engine;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class CrawlerService {
+    public String startCrawling(String url) throws Exception {
+        CompletableFuture.runAsync(
+                () -> {
+                    CrawlController controller;
+                    try {
+                        controller = getCrawlController();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    controller.addSeed(url);
 
-    @Autowired
-    private Environment env;
+                    // The factory which creates instances of crawlers.
+                    CrawlController.WebCrawlerFactory<Crawler> factory = Crawler::new;
 
-    public String startCrawling(String url) {
-        int numberOfThreads = Integer.parseInt(env.getProperty("crawler.numberOfThreads"));
-        int maximumLimit = Integer.parseInt(env.getProperty("crawler.maximumLimit"));
-        CrawlerQueue crawlerQueue = new CrawlerQueue();
-        // Create a thread pool task executor
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(numberOfThreads);
-        executor.setMaxPoolSize(numberOfThreads);
-        executor.initialize();
-        System.out.println(url);
-        crawlerQueue.addListOfSites(url);
-
-        // Initialize crawling with multiple threads
-        Crawler.initializeCrawling(numberOfThreads, crawlerQueue, maximumLimit, "ThreadPrefix");
-
-        System.out.println(crawlerQueue.getListOfSites());
-        // Shutdown the executor when crawling is finished
-        executor.shutdown();
+                    // Start the crawl. This is a blocking operation, meaning that your code
+                    // will reach the line after this only when crawling is finished.
+                    controller.start(factory, 5);
+                });
         return url;
+    }
+
+    private static CrawlController getCrawlController() throws Exception {
+        CrawlConfig config = CrawlConfiguration.getCrawlConfigFromDb();
+        // Instantiate the controller for this crawl.
+        PageFetcher pageFetcher = new PageFetcher(config);
+        RobotstxtConfig robotstxtConfig = RobotTxtConfiguration.getRobotstxtConfigFromDb();
+        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        return new CrawlController(config, pageFetcher, robotstxtServer);
     }
 }
