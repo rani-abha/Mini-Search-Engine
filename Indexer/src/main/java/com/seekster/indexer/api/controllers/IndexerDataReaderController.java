@@ -1,10 +1,7 @@
 package com.seekster.indexer.api.controllers;
 
-
-import com.seekster.indexer.api.data.ReceivedIndexQuery;
 import com.seekster.indexer.api.response.Response;
 import com.seekster.indexer.api.services.impl.IndexReaderImpl;
-import com.seekster.indexer.rabbitmq.message.ContentMessage;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @RestController
 @CrossOrigin
@@ -32,17 +30,26 @@ public class IndexerDataReaderController {
     private IndexReaderImpl indexReaderService;
 
     @PostMapping(value = "/index-query/process", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response> processIndexQuery(@RequestBody @Valid ReceivedIndexQuery receivedIndexQuery) throws IOException {
-        indexReaderService.processRequestFor(receivedIndexQuery);
-        return ResponseEntity.ok(
-                Response.builder()
-                        .responseTime(LocalDateTime.now())
-                        .status(HttpStatus.OK)
-                        .statusCode(HttpStatus.OK.value())
-                        .message("Index search query submitted successfully!")
-                        .method("IndexDataController.processIndexQuery")
-                        .executionMessage("Implemented business logic of service class method")
-                        .build()
-        );
+    public ResponseEntity<Response> processIndexQuery(@RequestBody @Valid String query) {
+        try {
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .responseTime(LocalDateTime.now())
+                            .status(HttpStatus.OK)
+                            .statusCode(HttpStatus.OK.value())
+                            .message("Index search query submitted successfully!")
+                            .data(Collections.singletonMap("result", indexReaderService.processQueryUsingQueryParser(query, 10)))
+                            .build()
+            );
+        } catch (IOException exception) {
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .responseTime(LocalDateTime.now())
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                            .message(exception.getMessage())
+                            .build()
+            );
+        }
     }
 }

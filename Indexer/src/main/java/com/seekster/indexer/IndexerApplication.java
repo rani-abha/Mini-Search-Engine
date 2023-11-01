@@ -10,20 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IndexerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(IndexerApplication.class, args);
-
-		ContentMessage message = new ContentMessage();
-		message.setUrl("https://example.com");
-		message.setTitle("Example Title");
-		message.setContent("This is the content of the message.");
-
-		ContentTokenizer contentTokenizer =new ContentTokenizer();
-		InvertedIndex invertedIndex = new InvertedIndex();
-
-		IndexingService indexingService = new IndexingService(contentTokenizer,invertedIndex);
-		indexingService.handleContentMessage(message);
-
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IndexerApplication.class, args);
+    }
 
 }

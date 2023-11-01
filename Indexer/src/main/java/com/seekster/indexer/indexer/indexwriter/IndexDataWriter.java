@@ -24,6 +24,7 @@ import java.util.List;
 @Setter
 @Slf4j
 public class IndexDataWriter {
+
     private IndexWriter indexWriter;
     private Directory directory;
     private IndexWriterConfig indexWriterConfig;
@@ -39,11 +40,9 @@ public class IndexDataWriter {
         this.indexWriter = new IndexWriter(directory, indexWriterConfig);
     }
 
-    public void write(Date packetDate, List<ContentMessage> packet) {
-        //TODO: handling query date if needed
-
+    public void write(ContentMessage message) {
         // creating fields for document
-        List<Field> fields = createTextField(packet);
+        List<Field> fields = createTextField(message);
 
         // creating document with fields
         Document document = createDocument(fields);
@@ -51,13 +50,14 @@ public class IndexDataWriter {
             // creating index Writer to write index data
             indexWriter.addDocument(document);
             indexWriter.commit();
+            indexWriter.close();
         } catch (IOException e) {
             log.error("Error while Creating Index Writer with Document: " + document);
         }
         this.lastActiveOn = System.currentTimeMillis();
     }
 
-    public Document createDocument(List<Field> fields) {
+    private Document createDocument(List<Field> fields) {
         Document document = new Document();
         for (Field field : fields) {
             document.add(field);
@@ -65,12 +65,11 @@ public class IndexDataWriter {
         return document;
     }
 
-    public List<Field> createTextField(List<ContentMessage> contentAttributes) {
+    private List<Field> createTextField(ContentMessage message) {
         List<Field> fields = new ArrayList<>();
-        for (ContentMessage contentAttribute : contentAttributes) {
-//            A field that is indexed and tokenized, without term vectors
-            fields.add(new TextField(contentAttribute.getUrl(), String.valueOf(contentAttribute.getContent()+contentAttribute.getTitle()), Field.Store.YES));
-        }
+        fields.add(new TextField("url", message.getUrl(), Field.Store.YES));
+        fields.add(new TextField("title", message.getTitle(), Field.Store.YES));
+        fields.add(new TextField("content", message.getContent(), Field.Store.YES));
         return fields;
     }
 

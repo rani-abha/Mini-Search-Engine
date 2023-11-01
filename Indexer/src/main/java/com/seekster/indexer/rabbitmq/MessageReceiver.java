@@ -1,5 +1,7 @@
 package com.seekster.indexer.rabbitmq;
 
+import com.seekster.indexer.api.services.IndexDataService;
+import com.seekster.indexer.api.services.impl.IndexDataServiceImpl;
 import com.seekster.indexer.rabbitmq.message.ContentMessage;
 import com.seekster.indexer.api.services.IndexingService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,10 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageReceiver {
     private static Log log = LogFactory.getLog(MessageReceiver.class);
- @Autowired
- private IndexingService indexingService;
-//    @Autowired
-//    private TacacsStaffUserServiceImpl tacacsStaffUserService;
+    @Autowired
+    private IndexDataServiceImpl indexingService;
 
     @RabbitListener(queues = RabbitMqConstants.TEST_RECEIVE)
     public void receiveMessageCrawler(CustomMessage message) {
@@ -22,31 +22,18 @@ public class MessageReceiver {
         System.out.println("Message : " + message);
         try {
             System.out.println("success..!!");
-        }
-        catch(Exception e) {
-            log.info("receiveMessageCrawler Failed :"+e.getMessage());
+        } catch (Exception e) {
+            log.info("receiveMessageCrawler Failed :" + e.getMessage());
         }
     }
 
     @RabbitListener(queues = RabbitMqConstants.QUEUE_CRAWLER_RECIEVE)
-    public void receiveMessageFromCrawler(ContentMessage message){
+    public void receiveMessageFromCrawler(ContentMessage message) {
         log.info("Received Staff User Message From RabbitMq is : <" + message + ">");
         try {
-            indexingService.handleContentMessage(message);
-//            tacacsStaffUserService.createTacacsStaffUser(message);
+            indexingService.writeIndexData(message);
         } catch (Exception e) {
             log.info("receiveMessageFromCrawler :" + e.getMessage());
         }
     }
-    }
-
-//    @RabbitListener(queues = RabbitMqConstants.QUEUE_STAFF_SAVE_USER_SEND)
-//    public void receiveMessageStaffManagementFromAPIGW(UserMessage message) {
-//        log.info("Received Staff User Message From RabbitMq is : <" + message + ">");
-//        try {
-//            tacacsStaffUserService.createTacacsStaffUser(message);
-//        } catch (Exception e) {
-//            log.info("receiveMessageCustomerApigw Failed :" + e.getMessage());
-//        }
-//    }
-
+}

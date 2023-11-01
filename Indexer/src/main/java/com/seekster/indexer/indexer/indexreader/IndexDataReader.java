@@ -2,56 +2,71 @@ package com.seekster.indexer.indexer.indexreader;
 
 import com.seekster.indexer.api.data.IndexSearchQuery;
 import com.seekster.indexer.indexer.indexstorage.IndexUtils;
+import com.seekster.indexer.rabbitmq.message.ContentMessage;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 
 @Slf4j
-public class IndexDataReader implements Callable<Boolean> {
-    private final IndexSearchQuery indexSearchQuery;
+@Getter
+@Setter
+public class IndexDataReader {
 
-    //TODO: Creating Queues
-//    private final ConcurrentQueue<Document> resultDocs;
+    private Directory directory;
+    private String indexPath;
+    private DirectoryReader directoryReader;
+    private IndexSearcher indexSearcher;
+    private QueryParser queryParser;
 
-    private final String index;
-
-    public IndexDataReader(IndexSearchQuery indexSearchQuery, String index
-    ) {
-        this.indexSearchQuery = indexSearchQuery;
-        this.index = index;
-//        this.resultDocs = resultDocs;
+    public IndexDataReader(String indexPath) throws IOException {
+        this.directory = FSDirectory.open(new File(indexPath).toPath());
+        this.indexPath = indexPath;
+        this.directoryReader = DirectoryReader.open(directory);
+        this.indexSearcher = new IndexSearcher(directoryReader);
+        this.queryParser = new QueryParser("content", new StandardAnalyzer());
     }
-    @Override
-    public Boolean call() {
+
+
+    public List<ContentMessage> read(String queryText, int noOfTopDoc) throws IOException {
+        List<ContentMessage> documents = new ArrayList<>();
         try {
-            read(indexSearchQuery);
-            return true;
-        } catch (IOException ioException) {
-            log.error("A index search process error occurred, with the following cause: [IOException, reason is {}].", ioException.getMessage());
-            return true; // task has been completed
-        } catch (IllegalArgumentException illegalArgumentException) {
-            log.error("A index search process error occurred, with the following cause: [IllegalArgumentException, reason is {}].", illegalArgumentException.getMessage());
-            return true; // task has been completed
+            // Parse the user's query
+            Query query = queryParser.parse(queryText);
+            // Execute the query and get the top 10 results
+            TopDocs topDocs = indexSearcher.search(query, noOfTopDoc);
+            // Iterate over the search results and print the documents
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document resultDoc = indexSearcher.doc(scoreDoc.doc);
+                documents.add(new ContentMessage(resultDoc.get("url"), resultDoc.get("title"), resultDoc.get("content")));
+            }
+        } catch (ParseException e) {
+            log.error("error occurred while reading index : {}", e.getMessage());
         }
-    }
 
-    public void read(IndexSearchQuery indexSearchQuery) throws IOException {
-        log.info("Started execution of reading utility of index reader job...");
-        indexSearchQuery.setIndex(index);
-        // Create the index directory
-        Directory directory = IndexUtils.openDirectory(indexSearchQuery.getIndex());
-        // Search based on fields
-        org.apache.lucene.index.IndexReader reader = DirectoryReader.open(directory);
+        // Close the reader and directory
+        directoryReader.close();
+        directory.close();
 
-        //TODO: Creating Factory
-//        IndexQueryFactory queryFactory = new IndexQueryFactory();
-//        IndexQuery indexQuery = queryFactory.submitIndexQuery(indexSearchQuery.getQuery().getType());
-//        indexQuery.execute(indexSearchQuery, reader, resultDocs);
+        return documents;
     }
 
 }
