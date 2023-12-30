@@ -28,6 +28,7 @@
 ### Gradle ###
 # Exclude Folder List #
 .gradle/
+.gradle
 build/
 
 
