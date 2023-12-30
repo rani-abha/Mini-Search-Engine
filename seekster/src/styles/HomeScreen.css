@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.App {
+    margin-top: "100px";
+    position: relative;
+    min-height: 100vh;
+    transition: opacity 0.9s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.front-screen {
+    background-color: black;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    /* transition: opacity 0.9s ease; */
+}
+
+.nav-container {
+    display: flex;
+    position: relative;
+    /* position: absolute; */
+    margin-left: 200;
+    justify-content: flex-end;
+}
+
+.console-text {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px 10px 0;
+}
+
+.console-text:hover {
+    text-decoration: none;
+    color: #ffff00;
+}
+
+.logo-text {
+    color: white;
+    font-size: 120px;
+    font-weight: bold;
+    width: 100%;
+    font-stretch: extra-expanded;
+    z-index: 1000;
+    text-align: center;
+    position: absolute;
+    top: 35%;
+}
+
+.frontscreen {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+    opacity: 1;
+}
+
+.info-des {
+    width: 60%;
+    margin-right: 3%;
+    color: white;
+}
+
+.logo {
+    background-color: blueviolet;
+}
+
+.search-container {
+    /* border: 1px solid #d8d3d3; */
+    margin-top: -250px;
+    z-index: 1001;
+    height: 400px;
+    align-items: center;
+    justify-content: center;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(180deg,
+            rgba(2, 0, 36, 0.0005252100840336116) 0%,
+            rgba(0, 0, 10, 1) 30%);
+}
+
+#canvasID {
+    opacity: 0.5;
+    /* border: 1px solid pink; */
+    transform: scale(2.3, 2.3);
+}
+
+.second-screen {
+    /* background-color:darkturquoise; */
+    /* background-color: blueviolet; */
+    flex: 1;
+    /* Let the second-screen expand to fill available space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(50%);
+    /* margin-top: 10px; */
+}
+
+.scrolled .front-screen {
+    opacity: 0;
+    transform: translateY(-50%);
+}
+
+.scrolled .second-screen {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* body {
+  margin: 10;
+  padding: 0;
+}
+
+.App {
+  position: relative;
+  min-height: 200vh;
+  transition: opacity 0.5s ease;
+}
+
+.front-screen{
+  background-color: chartreuse;
+}
+
+.front-screen,
+.second-screen {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+.info-des {
+  width: 60%;
+}
+.logo{
+  background-color: blueviolet;
+}
+
+.second-screen {
+  background-color: blueviolet;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(50%);
+  margin-top: 10px;
+}
+
+.scrolled .front-screen {
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+.scrolled .second-screen {
+  opacity: 1;
+  transform: translateY(0);
+} */
