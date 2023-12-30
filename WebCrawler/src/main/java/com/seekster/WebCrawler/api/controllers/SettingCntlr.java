@@ -100,16 +100,17 @@ public class SettingCntlr {
             );
         }
     }
+
     @PutMapping(value = "/update-setting/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             operationId = "update-setting",
             summary = "To update your existing settings info, Call this API",
             description = "updateSetting method is HTTP PUT mapping so to modify data in database."
     )
-    public ResponseEntity<Response> updateSetting(@RequestBody @Valid SettingDto settingDto, @PathVariable("id") @Valid String id)  {
+    public ResponseEntity<Response> updateSetting(@RequestBody @Valid SettingDto settingDto, @PathVariable("id") @Valid String id) {
         try {
             Setting setting = settingSvc.updateSetting(id, settingDto);
-            if(setting.getType().equals(SettingType.CRAWL)) {
+            if (setting.getType().equals(SettingType.CRAWL)) {
                 crawlSettingSingleton.setUpdatedValuesFromSetting(setting);
             } else if (setting.getType().equals(SettingType.ROBOT_TXT)) {
                 robotTxtSettingSingleton.setUpdatedValuesFromSetting(setting);

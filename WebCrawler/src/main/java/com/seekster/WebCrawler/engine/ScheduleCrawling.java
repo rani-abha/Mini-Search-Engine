@@ -16,6 +16,7 @@ public class ScheduleCrawling {
     private WebsiteRepo websiteRepo;
     @Autowired
     private CrawlerService crawlerService;
+
     @Scheduled(fixedRate = 1800000) // 30 minutes in milliseconds
     public void myScheduledMethod() throws Exception {
         List<Website> websiteList = fetchWebsite();

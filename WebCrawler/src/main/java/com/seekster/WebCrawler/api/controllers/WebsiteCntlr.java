@@ -88,13 +88,14 @@ public class WebsiteCntlr {
             );
         }
     }
+
     @PutMapping(value = "/update-website/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             operationId = "update-website",
             summary = "To update your existing website info, Call this API",
             description = "updateWebsite method is HTTP PUT mapping so to modify data in database."
     )
-    public ResponseEntity<Response> updateWebsite(@RequestBody @Valid WebsiteDto websiteDto, @PathVariable("id") @Valid String id)  {
+    public ResponseEntity<Response> updateWebsite(@RequestBody @Valid WebsiteDto websiteDto, @PathVariable("id") @Valid String id) {
         try {
             return ResponseEntity.ok(
                     Response.builder()

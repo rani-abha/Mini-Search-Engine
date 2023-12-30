@@ -27,21 +27,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
-    public OpenAPI baseOpenAPI(){
+    public OpenAPI baseOpenAPI() {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .info(
                         new Info().title("Web Crawler")
                                 .version("1.0")
                                 .description("Spring Boot Api Documentation")
-                                .contact( new io.swagger.v3.oas.models.info.Contact()
+                                .contact(new io.swagger.v3.oas.models.info.Contact()
                                         .name("Abha and Dhananjay")
                                         .email("swaggersharma69@gmail.com"))
                 );
     }
+
     @Override
     public void addCorsMappings(CorsRegistry registery) {
-        registery.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST","PUT", "DELETE");
+        registery.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
 }

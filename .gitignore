@@ -30,6 +30,10 @@
 .gradle/
 build/
 
+# storage
+Indexer/src/main/resources/lucene/
+WebCrawler/src/main/resources/frontier/
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

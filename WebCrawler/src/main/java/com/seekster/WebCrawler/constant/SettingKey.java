@@ -7,6 +7,7 @@ public class SettingKey {
         connectionTimeout, maxOutgoingLinksToFollow, maxDownloadSize, followRedirects, onlineTldListUpdate, shutdownOnEmptyQueue, threadMonitoringDelaySeconds,
         threadShutdownDelaySeconds, cleanupDelaySeconds, proxyHost, proxyPort, proxyUsername, proxyPassword, respectNoFollow, respectNoIndex
     }
+
     public enum RobotTxt {
         enabled, userAgentName, ignoreUADiscrimination, cacheSize
     }

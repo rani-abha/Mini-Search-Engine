@@ -25,6 +25,7 @@ public class Crawler extends WebCrawler {
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
             + "|png|mp3|mp4|zip|gz))$");
     private final MessageSender messageSender = ApplicationContextProvider.getApplicationContext().getBean(MessageSender.class);
+
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is

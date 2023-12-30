@@ -34,7 +34,8 @@ public class RobotTxtSettingSingleton {
     private boolean ignoreUADiscrimination;
     private int cacheSize;
 
-    private RobotTxtSettingSingleton() {}
+    private RobotTxtSettingSingleton() {
+    }
 
     @PostConstruct
     private void setFromSettings() throws GenericException, IllegalAccessException {

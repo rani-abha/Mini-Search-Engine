@@ -19,5 +19,6 @@ public interface SettingSvc {
     Setting updateSetting(String id, SettingDto settingDto) throws GenericException, ValidationException, IllegalArgumentException;
 
     Setting deleteSetting(String id) throws GenericException, IllegalArgumentException;
+
     Map<String, String> getListOfSettingKeyValues(SettingType type) throws GenericException;
 }

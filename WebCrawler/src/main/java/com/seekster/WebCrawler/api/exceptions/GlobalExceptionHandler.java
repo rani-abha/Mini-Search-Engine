@@ -18,7 +18,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Response> handleMethodArgumentNotValidException (MethodArgumentNotValidException exception){
+    public ResponseEntity<Response> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         Map<String, String> response = new HashMap<>();
         exception.getBindingResult().getAllErrors().forEach((objectError -> {
             String fieldName = ((FieldError) objectError).getField();
@@ -35,8 +35,9 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Response> handleHttpMessageNotReadableException (HttpMessageNotReadableException exception){
+    public ResponseEntity<Response> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
         Map<String, String> response = new HashMap<>();
         String name = "HttpMessageNotReadableException";
         String message = exception.getMessage();

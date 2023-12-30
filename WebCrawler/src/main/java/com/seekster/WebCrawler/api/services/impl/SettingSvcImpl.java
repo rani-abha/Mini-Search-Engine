@@ -25,6 +25,7 @@ public class SettingSvcImpl implements SettingSvc {
     private SettingRepo settingRepo;
     @Autowired
     private DtoConverter<SettingDto, Setting> converter;
+
     @Override
     public List<Setting> getSettingList(SettingType settingType) throws GenericException {
         List<Setting> settings = settingRepo.findByType(settingType);
@@ -40,7 +41,7 @@ public class SettingSvcImpl implements SettingSvc {
 
         List<Setting> settingList = settingRepo.findAll()
                 .stream()
-                .filter(setting -> setting.getKey().equalsIgnoreCase(settingDto.getKey())  && setting.getType() == settingDto.getType())
+                .filter(setting -> setting.getKey().equalsIgnoreCase(settingDto.getKey()) && setting.getType() == settingDto.getType())
                 .toList();
 
         Setting setting;
@@ -133,7 +134,7 @@ public class SettingSvcImpl implements SettingSvc {
         }
         {
             log.info("Preparing map of setting keys and value...");
-            for (Setting setting: settings) {
+            for (Setting setting : settings) {
                 settingMap.put(setting.getKey(), setting.getValue());
             }
             log.info("Map of setting is: {}", settingMap);
