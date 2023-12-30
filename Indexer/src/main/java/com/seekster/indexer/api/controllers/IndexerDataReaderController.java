@@ -29,7 +29,7 @@ public class IndexerDataReaderController {
     @Autowired
     private IndexReaderImpl indexReaderService;
 
-    @PostMapping(value = "/index-query/process", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/index-query/process", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> processIndexQuery(@RequestBody @Valid String query) {
         try {
             return ResponseEntity.ok(
